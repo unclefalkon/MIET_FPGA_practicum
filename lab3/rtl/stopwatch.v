@@ -1,11 +1,11 @@
 module stopwatch(
-    input start_stop,
-    input reset,
-    input clk,
-    output [6:0] HEX0,
-    output [6:0] HEX1,
-    output [6:0] HEX2,
-    output [6:0] HEX3
+    input clk100_i,
+    input rstn_i,
+    input start_stop_i,
+    output [6:0] hex0_o,
+    output [6:0] hex1_o,
+    output [6:0] hex2_o,
+    output [6:0] hex3_o
 );
 
 endmodule
