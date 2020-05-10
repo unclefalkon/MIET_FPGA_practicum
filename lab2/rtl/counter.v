@@ -6,36 +6,42 @@ module counter(
     input  [1:0]  key_i,
     output [9:0] ledr_o,
     output [6:0] hex1_o,
-    output [6:0] hex0_o
+    output [6:0] hex0_o);
+
+reg [9:0] register;
+reg [7:0] counter;
+
+wire bt_down;
+
+pinched btdown(
+  .bt_i  ( !key_i[0] ),
+  .rst_i  ( key_i[1] ),
+  .clk_i     ( clk_i ),
+  .btnd_o  ( bt_down )
 );
 
-reg [9:0] register = 10'b0;
-reg [7:0] counter  =  8'd0;
-
-always @ ( posedge clk_i ) begin
-
-  if ( key_i[0] ) begin
-    register = sw_i;
-    counter  = counter + 1; //исправлю условие срабатывания счетчика, когда будет индивидуальное задание
+always @ ( posedge clk_i or negedge key_i[1]) begin
+  if ( !key_i[1] ) begin
+   register <= 10'b0;
+   counter  <=  8'd0;
   end
-  
-  if ( key_i[1] ) begin
-    register = 10'b0;
-    counter  =  8'd0;
-  end
-  
-end
+  else
+    if ( bt_down ) begin
+      register <=        sw_i;
+      counter  <= counter + 1;
+    end
+end 
 
 assign ledr_o = register;
 
 dectohex dec0
-( .in(counter[7:4]),
-  .out(hex0_o)
-  );
+( .in ( counter[7:4] ),
+  .out( hex0_o       )
+);
   
 dectohex dec1
-( .in(counter[3:0]),
-  .out(hex1_o)
+( .in ( counter[3:0] ),
+  .out( hex1_o       )
 );
 
 endmodule
