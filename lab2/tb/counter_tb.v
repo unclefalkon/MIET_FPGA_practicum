@@ -22,25 +22,31 @@ counter DUT(
   .hex1_o ( hex1_o )
 );
 
-assign key_i[1]=0;
-assign key_i[0]=1; //тест с нажатием кнопки KEY_0
-
-//assign key_i[1]=1;
-//assign key_i[0]=0; //тест с нажатием кнопки KEY_1
+reg [1:0] sw = 2'b11;
 
 initial begin
   clk_i = 1'b1;
   forever begin
-    #CLK_SEMIPERIOD clk_i = ~clk_i;
-  end
+            #CLK_SEMIPERIOD clk_i = ~clk_i;
+          end
 end
 
 initial begin
-  sw_i[9:0] = 10'd0;
-  repeat(32)begin
-    #(CLK_SEMIPERIOD-1);
-    sw_i[9:0] = $random();
-  end
-end
-
+  sw_i[9:0] = 10'd1;
+  forever begin
+            #( CLK_SEMIPERIOD - 1 );
+            sw_i[9:0] = $random();
+          end
+        end
+        
+initial begin
+          repeat( 16 )
+          begin
+            #50;
+            sw = $random();
+          end
+        end
+        
+assign key_i = sw; 
+ 
 endmodule
