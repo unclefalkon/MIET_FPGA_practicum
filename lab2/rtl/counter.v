@@ -1,5 +1,4 @@
 `timescale 1ns / 1ps
-
 module counter(
     input         clk_i,
     input  [9:0]   sw_i,
